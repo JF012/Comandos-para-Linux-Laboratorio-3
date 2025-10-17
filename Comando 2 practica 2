@@ -1,1 +1,40 @@
+# Script 1: Backup con TAR
+$ #!/usr/bin/env bash
+USER_NAME="$(whoami)"
+HOME_DIR="$HOME"
+DEST_DIR="$HOME/backups"
+DATE="$(date '+%d-%m-%Y:%H:%M')"
+BACKUP_NAME="backup-home-${USER_NAME}-${DATE}.tar.gz"
+BACKUP_PATH="${DEST_DIR}/${BACKUP_NAME}"
 
+mkdir -p "$DEST_DIR"
+tar -czf "$BACKUP_PATH" --exclude="$DEST_DIR" -C "$HOME_DIR" .
+echo "Backup creado en: $BACKUP_PATH"
+
+
+
+# Script 2: Guardar salida de ifconfig en el Escritorio
+$ #!/usr/bin/env bash
+if [ -d "$HOME/Escritorio" ]; then
+  DESKTOP="$HOME/Escritorio"
+elif [ -d "$HOME/Desktop" ]; then
+  DESKTOP="$HOME/Desktop"
+else
+  DESKTOP="$HOME"
+fi
+
+read -rp "Nombre del archivo (sin extensión): " BASENAME
+if [ -z "${BASENAME// }" ]; then
+  BASENAME="ifconfig-$(date '+%d-%m-%Y_%H-%M')"
+fi
+BASENAME="${BASENAME//\//-}"
+FILENAME="${BASENAME}.txt"
+OUTFILE="${DESKTOP}/${FILENAME}"
+
+if command -v ifconfig >/dev/null 2>&1; then
+  ifconfig > "$OUTFILE"
+else
+  ip addr > "$OUTFILE"
+fi
+
+echo "Archivo creado en: $OUTFILE"
