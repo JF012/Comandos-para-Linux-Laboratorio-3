@@ -1,1 +1,32 @@
+# editamos la carpeta de grub
+$ sudo nano /etc/default/grub
+
+# Busca la linea de comando de grub que dice: "GRUB_TIMEOUT=5" cambiala a: "GRUB_TIMEOUT=20" 
+
+# Luego actualizas la carpeta 
+$ sudo update-grub
+
+# Confirma que el cambio fue exitoso: 
+$ grep -n '^GRUB_TIMEOUT' /etc/default/grub
+
+# Deberia mostrar esto: 
+$ 7: "GRUB_TIMEOUT=20" 
+
+# Luego de haber hecho estos cambios reinicia tu vm
+# Al reiniciar espera a que aparezca tu menu de grub
+# Ya dentro del menu de grub utiliza las flechas de tu teclado
+# Quedate en la opcion que dice: "* PARROT OS 6 GNU/LINUX" y presiona la letra "e"
+# Presiona la tecla que tiene la flecha de abajo hasta encontrar esta linea: "linux /@/boot/vmlinuz-6.12.0-2-amd64 root=UUID=8037420d-5b0e-4deb-bef7-7609a1c1f17f ro rootflags=subvol=@ quiet splash noautomount quiet splash"
+# El unico cambio que tienes que hacer es remplazar "ro" por "rw" y al final de la linea donde dice "quiet splash" agregar: "init=/bin/bash" 
+# Esta seria la linea final: "linux /@/boot/vmlinuz-6.12.0-2-amd64 root=UUID=8037420d-5b0e-4deb-bef7-7609a1c1f17f rw rootflags=subvol=@ quiet splash noautomount quiet splash init=/bin/bas"
+# Luego presionas F10 y esto te llevara a la Shell
+
+# Escribe: 
+$ mount -o remount,rw /
+$ passwd root
+New password: 
+Retype new password: 
+$ sync
+$ exec /sbin/reboot -f
+
 
